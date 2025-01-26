@@ -49,9 +49,22 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            /*'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], */
+			'firstname' => ['required', 'alpha'],
+            'lastname' => ['required', 'alpha'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'contact_number' => ['required', 'numeric'],
+            'password' => ['required', 'string', 'confirmed'],
+            'postcode' => ['required'],
+            'hobbies' => ['required'],
+            'gender' => ['required'],
+          //  'state_id' => ['required'],
+           // 'city_id' => ['required'],
+          //  'role_id' => ['required','array'],
+            'files' => ['required'],
         ]);
     }
 
@@ -63,10 +76,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+		/*  echo "<pre>";
+		print_r($data);
+		echo "</pre>";
+		die;  */
+		/* laravel last query print */
+   //  \DB::enableQueryLog(); // Enable query log
+         $user = User::create([
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+			'email' => $data['email'],
+            'contact_number' => $data['contact_number'],
+            'password' => Hash::make($data['password']),
+            'postcode' => $data['postcode'],
+            'hobbies' => implode(",",$data['hobbies']),
+            'gender' => $data['gender'],
+           // 'state_id' => $data['state_id'],
+           // 'city_id' => $data['city_id'],
+           // 'role_id' => implode(",",$data['role_id']),
+            'files' => implode(",",$uploadedFiles),
         ]);
+		//dd(\DB::getQueryLog()); // Show results of log
+		return $user;
     }
 }
